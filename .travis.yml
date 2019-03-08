@@ -18,6 +18,8 @@
 #   DOCKER_PASSWORD
 #
 
+language: bash
+
 sudo: required
 
 services:
