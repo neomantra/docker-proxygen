@@ -11,14 +11,26 @@ These are not "thin" images.  All build dependencies remain, however uninstalled
 Image tags follow the following format:
 
  * `neomantra/proxygen:<tag-version>`
- * `neomantra/proxygen:<tag-version>-oo<onload-version>`
+ * `neomantra/proxygen:<tag-version>-oo<zf><onload-version>`
 
-In addition to an `ubuntu:xenial` base, we also build against [OpenOnload Docker base images](https://github.com/neomantra/docker-onload) for the following OpenOnload versions:
+In addition to an `ubuntu:xenial` base, we also build against [OpenOnload Docker base images](https://github.com/neomantra/docker-onload).
 
- * 201811
- * 201805-u1
- * 201710-u1.1
- * 201606-u1.3
+Full layout:
+
+ * `neomantra/proxygen:latest`
+ * `neomantra/proxygen:latest-oo201811`
+ * `neomantra/proxygen:latest-oo201805-u1`
+ * `neomantra/proxygen:latest-oo201710-u1.1`
+ * `neomantra/proxygen:latest-oo201606-u1.3`
+ * `neomantra/proxygen:latest-oozf201811`
+ * `neomantra/proxygen:latest-oozf201805-u1`
+ * `neomantra/proxygen:latest-oozf201710-u1.1`
+ * `neomantra/proxygen:latest-oozf201606-u1.3`
+
+Here's a recent tag list:
+  * `latest`
+  * `2019.03.04.00`
+
 
 ## Image Build Arguments
 
