@@ -24,12 +24,11 @@ services:
   - docker
 
 env:
-  matrix:
-    - PROXYGEN_BUILD_FROM=ubuntu:xenial
-    - PROXYGEN_BUILD_FROM=neomantra/onload:201811-xenial
-    - PROXYGEN_BUILD_FROM=neomantra/onload:201805-u1-xenial
-    - PROXYGEN_BUILD_FROM=neomantra/onload:201710-u1.1-xenial
-    - PROXYGEN_BUILD_FROM=neomantra/onload:201606-u1.3-xenial
+  - PROXYGEN_BUILD_FROM=ubuntu:xenial
+  - PROXYGEN_BUILD_FROM=neomantra/onload:201811-xenial
+  - PROXYGEN_BUILD_FROM=neomantra/onload:201805-u1-xenial
+  - PROXYGEN_BUILD_FROM=neomantra/onload:201710-u1.1-xenial
+  - PROXYGEN_BUILD_FROM=neomantra/onload:201606-u1.3-xenial
 
 jobs:
   include:
