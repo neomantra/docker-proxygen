@@ -1,0 +1,51 @@
+# docker-proxygen .travis.yml
+#
+# Builds docker-proxygen images on Travis CI
+#
+# https://travis-ci.org/neomantra/docker-proxygen
+#
+# Master will build with Docker tag:
+#   neomantra/proxygen:latest
+#   neomantra/proxygen:latest-oo<onload-version>
+#
+# Releases should be tagged in git as:
+#   neomantra/proxygen:<tag-version> 
+#   neomantra/proxygen:<tag-version>-oo<onload-version>
+#
+# Travis Environment Variables:
+#   DOCKER_ORG
+#   DOCKER_USERNAME
+#   DOCKER_PASSWORD
+#
+
+sudo: required
+
+services:
+  - docker
+
+env:
+  PROXYGEN_BUILD_FROM: ubuntu:xenial
+  PROXYGEN_BUILD_FROM: neomantra/onload:201811-xenial
+  PROXYGEN_BUILD_FROM: neomantra/onload:201805-u1-xenial
+  PROXYGEN_BUILD_FROM: neomantra/onload:201710-u1.1-xenial
+  PROXYGEN_BUILD_FROM: neomantra/onload:201606-u1.3-xenial
+
+jobs:
+  include:
+    - stage: build Docker image for proxygen
+      - if [[ "$TRAVIS_BRANCH" == "master" ]] ; then
+          IMAGE_TAG_SUFFIX=$(echo "$PROXYGEN_BUILD_FROM" | sed -e '/^neomantra\/onload:\([0-9u-]*\)-xenial$/!d;s//-oo\1/' ) ;
+          PUSH_DEST="$DOCKER_ORG/proxygen:latest$IMAGE_TAG_SUFFIX" ;
+          docker build -t proxygen-master --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} . ;
+          docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
+          docker tag proxygen-master $PUSH_DEST &&
+          docker push $PUSH_DEST ;
+        fi
+      - if [[ "$TRAVIS_TAG" ]] ; then
+          IMAGE_TAG_SUFFIX=$(echo "$PROXYGEN_BUILD_FROM" | sed -e '/^neomantra\/onload:\([0-9u-]*\)-xenial$/!d;s//-oo\1/' ) ;
+          PUSH_DEST="$DOCKER_ORG/proxygen:$TRAVIS_TAG$IMAGE_TAG_SUFFIX" ;
+          docker build -t proxygen-tag --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
+          docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
+          docker tag proxygen-tag $PUSH_DEST &&
+          docker push $PUSH_DEST &&
+        fi
