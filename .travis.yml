@@ -31,20 +31,24 @@ env:
   - PROXYGEN_BUILD_FROM=neomantra/onload:201805-u1-xenial-nozf
   - PROXYGEN_BUILD_FROM=neomantra/onload:201710-u1.1-xenial-nozf
   - PROXYGEN_BUILD_FROM=neomantra/onload:201606-u1.3-xenial-nozf
+  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-xenial
+  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201805-u1-xenial
+  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201710-u1.1-xenial
+  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201606-u1.3-xenial
 
 script:
   - if [[ "$TRAVIS_BRANCH" == "master" ]] ; then
-      IMAGE_TAG_SUFFIX=$(echo "$PROXYGEN_BUILD_FROM" | sed -e '/^neomantra\/onload:\([0-9u-]*\)-xenial$/!d;s//-oo\1/' ) ;
+      IMAGE_TAG_SUFFIX=$(echo "$PROXYGEN_BUILD_FROM" | sed -e '/^neomantra\/onload\(.*\):\([0-9u-]*\)-xenial\(.*\)/!d;s//-oo\2/' ) ;
       PUSH_DEST="$DOCKER_ORG/proxygen:latest$IMAGE_TAG_SUFFIX" ;
-      docker build -t proxygen-master --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} . ;
+      docker build -t proxygen-master --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} . ;
       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
       docker tag proxygen-master $PUSH_DEST &&
       docker push $PUSH_DEST ;
     fi
   - if [[ "$TRAVIS_TAG" ]] ; then
-      IMAGE_TAG_SUFFIX=$(echo "$PROXYGEN_BUILD_FROM" | sed -e '/^neomantra\/onload:\([0-9u-]*\)-xenial$/!d;s//-oo\1/' ) ;
+      IMAGE_TAG_SUFFIX=$(echo "$PROXYGEN_BUILD_FROM" | sed -e '/^neomantra\/onload\(.*\):\([0-9u-]*\)-xenial\(.*\)/!d;s//-oo\2/' ) ;
       PUSH_DEST="$DOCKER_ORG/proxygen:$TRAVIS_TAG$IMAGE_TAG_SUFFIX" ;
-      docker build -t proxygen-tag --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
+      docker build -t proxygen-tag --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
       docker tag proxygen-tag $PUSH_DEST &&
       docker push $PUSH_DEST ;
