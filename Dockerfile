@@ -6,7 +6,7 @@
 # See README.md for more information.
 #
 # Build Arguments:
-#   PROXYGEN_BUILD_FROM_BASE="xenial"
+#   PROXYGEN_BUILD_FROM_BASE="bionic"
 #   PROXYGEN_BUILD_FROM_TAG="ubuntu"
 #   PROXYGEN_BUILD_FROM
 #   J_LEVEL=1
@@ -23,7 +23,7 @@
 ###############################################################################
 
 ARG PROXYGEN_BUILD_FROM_BASE="ubuntu"
-ARG PROXYGEN_BUILD_FROM_TAG="xenial"
+ARG PROXYGEN_BUILD_FROM_TAG="bionic"
 ARG PROXYGEN_BUILD_FROM="${PROXYGEN_BUILD_FROM_BASE}:${PROXYGEN_BUILD_FROM_TAG}"
 
 FROM ${PROXYGEN_BUILD_FROM}

@@ -2,7 +2,7 @@
 
 [![Travis Status](https://travis-ci.org/neomantra/docker-proxygen.svg?branch=master)](https://travis-ci.org/neomantra/docker-proxygen)  [![](https://images.microbadger.com/badges/image/neomantra/proxygen.svg)](https://microbadger.com/#/images/neomantra/proxygen "microbadger.com")
 
-`docker-proxygen` provides a Dockerfile which installs [the Proxygen library](https://github.com/facebook/proxygen) on Ubuntu.  Facebook seems to prefer Ubuntu 16.04 Xenial now, so that is what is used here.
+`docker-proxygen` provides a Dockerfile which installs [the Proxygen library](https://github.com/facebook/proxygen) on Ubuntu 18.04 Bionic.
 
 These are not "thin" images.  All build dependencies remain, however uninstalled build artifacts are deleted.
 
@@ -38,7 +38,7 @@ For custom builds, the following Docker `--build-arg` options are available:
 
 | Key  | Default | Description |
 :----- | :-----: |:----------- |
-|PROXYGEN_BUILD_FROM_BASE | xenial |Docker image to base build on. |
+|PROXYGEN_BUILD_FROM_BASE | bionic |Docker image to base build on. |
 |PROXYGEN_BUILD_FROM_TAG | ubuntu |Docker tag to base build on. |
 |PROXYGEN_BUILD_FROM | `${PROXYGEN_BUILD_FROM_BASE}:${PROXYGEN_BUILD_FROM_TAG}` |Full Docker `FROM` path. |
 |J_LEVEL | 1 |Concurrent build level (passed to `-j`) |
