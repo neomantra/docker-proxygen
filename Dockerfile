@@ -6,11 +6,10 @@
 # See README.md for more information.
 #
 # Build Arguments:
-#   PROXYGEN_BUILD_FROM_BASE="bionic"
+#   PROXYGEN_BUILD_FROM_BASE="cosmic"
 #   PROXYGEN_BUILD_FROM_TAG="ubuntu"
 #   PROXYGEN_BUILD_FROM
 #   J_LEVEL=1
-#   JEMALLOC_VERSION="5.1.0"
 #   COMMON_VERSION="2019.03.04.00"
 #   FOLLY_VERSION
 #   FIZZ_VERSION
@@ -23,7 +22,7 @@
 ###############################################################################
 
 ARG PROXYGEN_BUILD_FROM_BASE="ubuntu"
-ARG PROXYGEN_BUILD_FROM_TAG="bionic"
+ARG PROXYGEN_BUILD_FROM_TAG="cosmic"
 ARG PROXYGEN_BUILD_FROM="${PROXYGEN_BUILD_FROM_BASE}:${PROXYGEN_BUILD_FROM_TAG}"
 
 FROM ${PROXYGEN_BUILD_FROM}
@@ -52,6 +51,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
         libgflags-dev \
         libgoogle-glog-dev \
         libiberty-dev \
+        libjemalloc-dev \
         libkrb5-dev \
         liblz4-dev \
         liblzma-dev \
@@ -69,35 +69,27 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 
 ARG J_LEVEL=1
 
-# Install jemalloc
-ARG JEMALLOC_VERSION="5.1.0"
-RUN cd /tmp \
-    && curl -fSL https://github.com/jemalloc/jemalloc/releases/download/${JEMALLOC_VERSION}/jemalloc-${JEMALLOC_VERSION}.tar.bz2 -o jemalloc-${JEMALLOC_VERSION}.tar.bz2 \
-    && tar --no-same-owner -xjf  jemalloc-${JEMALLOC_VERSION}.tar.bz2 \
-    && cd jemalloc-${JEMALLOC_VERSION} \
-    && ./configure \
-    && make -j${J_LEVEL} \
-    && make -j${J_LEVEL} install \
-    && cd /tmp \
-    && rm -rf jemalloc-${JEMALLOC_VERSION}.tar.bz2 jemalloc-${JEMALLOC_VERSION} \
-    && /sbin/ldconfig
-
 # Common default version for all libs, but one can override with specific ARGs
 ARG COMMON_VERSION="2019.03.04.00"
 
 # Install folly
 ARG FOLLY_VERSION="${COMMON_VERSION}"
+
+# https://github.com/facebook/folly/issues/975
+ADD ./patch.folly.975 /tmp/patch.folly.975
+
 RUN cd /tmp \
     && curl -fSL https://github.com/facebook/folly/archive/v${FOLLY_VERSION}.tar.gz -o ${FOLLY_VERSION}.tar.gz \
     && tar --no-same-owner -xzf ${FOLLY_VERSION}.tar.gz \
     && cd folly-${FOLLY_VERSION} \
+    && patch -p0 < /tmp/patch.folly.975 \
     && mkdir _build \
     && cd _build \
     && cmake configure -DBUILD_SHARED_LIBS=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON .. \
     && make -j${J_LEVEL} \
     && make -j${J_LEVEL} install \
     && cd /tmp \
-    && rm -rf ${FOLLY_VERSION}.tar.gz folly-${FOLLY_VERSION} \
+    && rm -rf ${FOLLY_VERSION}.tar.gz folly-${FOLLY_VERSION} patch.folly.975 \
     && /sbin/ldconfig
 
 # Install fizz
@@ -110,6 +102,7 @@ RUN cd /tmp \
     && cd _build \
     && cmake configure -DBUILD_SHARED_LIBS=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON ../fizz \
     && make -j${J_LEVEL} \
+    && ctest \
     && make install -j${J_LEVEL} \
     && cd /tmp \
     && rm -rf ${FIZZ_VERSION}.tar.gz fizz-${FIZZ_VERSION} \
@@ -148,7 +141,6 @@ RUN cd /tmp \
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
 LABEL proxygen_build_from_base="${PROXYGEN_BUILD_FROM_BASE}"
 LABEL proxygen_build_from_tag="${PROXYGEN_BUILD_FROM_TAG}"
-LABEL jemalloc_version="${JEMALLOC_VERSION}"
 LABEL common_version="${COMMON_VERSION}"
 LABEL folly_version="${FOLLY_VERSION}"
 LABEL fizz_version="${FIZZ_VERSION}"

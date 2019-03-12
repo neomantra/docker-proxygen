@@ -1,0 +1,31 @@
+diff --git folly/io/async/c folly/io/async/SSLOptions.h
+index 395cba61..25e5edd7 100644
+--- folly/io/async/SSLOptions.h
++++ folly/io/async/SSLOptions.h
+@@ -30,7 +30,7 @@ struct SSLCommonOptions {
+   /**
+    * The cipher list recommended for this options configuration.
+    */
+-  static constexpr auto kCipherList = folly::make_array(
++  static constexpr __attribute__((used)) auto kCipherList = folly::make_array(
+       "ECDHE-ECDSA-AES128-GCM-SHA256",
+       "ECDHE-RSA-AES128-GCM-SHA256",
+       "ECDHE-ECDSA-AES256-GCM-SHA384",
+@@ -48,7 +48,7 @@ struct SSLCommonOptions {
+    * The list of signature algorithms recommended for this options
+    * configuration.
+    */
+-  static constexpr auto kSignatureAlgorithms = folly::make_array(
++  static constexpr __attribute__((used)) auto kSignatureAlgorithms = folly::make_array(
+       "RSA+SHA512",
+       "ECDSA+SHA512",
+       "RSA+SHA384",
+@@ -73,7 +73,7 @@ struct SSLServerOptions {
+   /**
+    * The list of ciphers recommended for server use.
+    */
+-  static constexpr auto kCipherList = folly::make_array(
++  static constexpr __attribute__((used)) auto kCipherList = folly::make_array(
+       "ECDHE-ECDSA-AES128-GCM-SHA256",
+       "ECDHE-ECDSA-AES256-GCM-SHA384",
+       "ECDHE-ECDSA-AES128-SHA",
