@@ -1,5 +1,10 @@
 # docker-proxygen CHANGELOG
 
+## 2019-04-17
+
+ * Update COMMON_VERSION to 2019.04.15.00
+ * Restore `wangle` testing, excluding Bootstrap
+
 ## 2019-03-12
 
  * Update to `cosmic` and patch Folly

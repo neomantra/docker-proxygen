@@ -29,7 +29,7 @@ Full layout:
 
 Here's a recent tag list:
   * `latest`
-  * `2019.03.04.00`
+  * `2019.04.15.00`
 
 
 ## Image Build Arguments
@@ -43,7 +43,7 @@ For custom builds, the following Docker `--build-arg` options are available:
 |PROXYGEN_BUILD_FROM | `${PROXYGEN_BUILD_FROM_BASE}:${PROXYGEN_BUILD_FROM_TAG}` |Full Docker `FROM` path. |
 |J_LEVEL | 1 |Concurrent build level (passed to `-j`) |
 |JEMALLOC_VERSION | 5.1.0 |[jemalloc](https://github.com/jemalloc/jemalloc) version. |
-|COMMON_VERSION | 2019.03.04.00 |Common version for all the Facebook libraries. |
+|COMMON_VERSION | 2019.04.15.00 |Common version for all the Facebook libraries. |
 |FOLLY_VERSION | `${COMMON_VERSION}` |[Folly](https://github.com/facebook/folly) version. |
 |FIZZ_VERSION | `${COMMON_VERSION}` |[Fizz](https://github.com/facebookincubator/fizz) version. |
 |WANGLE_VERSION | `${COMMON_VERSION}` |[Wangle](https://github.com/facebook/wangle) version. |
