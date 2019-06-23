@@ -1,5 +1,9 @@
 # docker-proxygen CHANGELOG
 
+## 2019-06-23
+
+ * Update COMMON_VERSION to 2019.06.17.00
+
 ## 2019-04-17
 
  * Update COMMON_VERSION to 2019.04.15.00

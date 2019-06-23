@@ -10,7 +10,7 @@
 #   PROXYGEN_BUILD_FROM_TAG="ubuntu"
 #   PROXYGEN_BUILD_FROM
 #   J_LEVEL=1
-#   COMMON_VERSION="2019.04.15.00"
+#   COMMON_VERSION="2019.06.17.00"
 #   FOLLY_VERSION
 #   FIZZ_VERSION
 #   WANGLE_VERSION
@@ -26,6 +26,10 @@ ARG PROXYGEN_BUILD_FROM_TAG="cosmic"
 ARG PROXYGEN_BUILD_FROM="${PROXYGEN_BUILD_FROM_BASE}:${PROXYGEN_BUILD_FROM_TAG}"
 
 FROM ${PROXYGEN_BUILD_FROM}
+
+ARG PROXYGEN_BUILD_FROM_BASE="ubuntu"
+ARG PROXYGEN_BUILD_FROM_TAG="cosmic"
+ARG PROXYGEN_BUILD_FROM="${PROXYGEN_BUILD_FROM_BASE}:${PROXYGEN_BUILD_FROM_TAG}"
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
 
@@ -71,26 +75,22 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 ARG J_LEVEL=1
 
 # Common default version for all libs, but one can override with specific ARGs
-ARG COMMON_VERSION="2019.04.15.00"
+ARG COMMON_VERSION="2019.06.17.00"
 
 # Install folly
 ARG FOLLY_VERSION="${COMMON_VERSION}"
-
-# https://github.com/facebook/folly/issues/975
-ADD ./patch.folly.975 /tmp/patch.folly.975
 
 RUN cd /tmp \
     && curl -fSL https://github.com/facebook/folly/archive/v${FOLLY_VERSION}.tar.gz -o ${FOLLY_VERSION}.tar.gz \
     && tar --no-same-owner -xzf ${FOLLY_VERSION}.tar.gz \
     && cd folly-${FOLLY_VERSION} \
-    && patch -p0 < /tmp/patch.folly.975 \
     && mkdir _build \
     && cd _build \
     && cmake configure -DBUILD_SHARED_LIBS=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON .. \
     && make -j${J_LEVEL} \
     && make -j${J_LEVEL} install \
     && cd /tmp \
-    && rm -rf ${FOLLY_VERSION}.tar.gz folly-${FOLLY_VERSION} patch.folly.975 \
+    && rm -rf ${FOLLY_VERSION}.tar.gz folly-${FOLLY_VERSION} \
     && /sbin/ldconfig
 
 # Install fizz
@@ -147,9 +147,9 @@ RUN cd /tmp \
     && /sbin/ldconfig
 
 # Apply labels
-LABEL maintainer="Evan Wies <evan@neomantra.net>"
 LABEL proxygen_build_from_base="${PROXYGEN_BUILD_FROM_BASE}"
 LABEL proxygen_build_from_tag="${PROXYGEN_BUILD_FROM_TAG}"
+LABEL proxygen_build_from="${PROXYGEN_BUILD_FROM}"
 LABEL common_version="${COMMON_VERSION}"
 LABEL folly_version="${FOLLY_VERSION}"
 LABEL fizz_version="${FIZZ_VERSION}"
