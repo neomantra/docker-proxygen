@@ -53,17 +53,16 @@ matrix:
     - IMAGE_TAG_SUFFIX=-disco
 
 script:
-  - if [[ "$TRAVIS_BRANCH" == "master" ]] ; then
-      PUSH_DEST="$DOCKER_ORG/proxygen:latest$IMAGE_TAG_SUFFIX" ;
-      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
-      docker build -t proxygen-master -t $PUSH_DEST --cache-from $PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} . ;
-      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
-      docker push $PUSH_DEST ;
-      if [[ "$TRAVIS_TAG" ]] ; then
+  - MASTER_PUSH_DEST="$DOCKER_ORG/proxygen:latest$IMAGE_TAG_SUFFIX" ;
+    if [ "$TRAVIS_BRANCH" = "master" ] ; then
+      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
+        docker build -t $MASTER_PUSH_DEST --cache-from $MASTER_PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} . ;
+      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
+        docker push $MASTER_PUSH_DEST ;
+    elif [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ] ; then
         TAG_PUSH_DEST="$DOCKER_ORG/proxygen:$TRAVIS_TAG$IMAGE_TAG_SUFFIX" ;
-        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
-        docker build -t proxygen-tag -t $TAG_PUSH_DEST --cache-from $PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
-        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
-        docker push $TAG_PUSH_DEST ;
-      fi ;
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
+          docker build -t $TAG_PUSH_DEST --cache-from $MASTER_PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
+          docker push $TAG_PUSH_DEST ;
     fi
