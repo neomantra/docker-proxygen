@@ -56,11 +56,15 @@ script:
   - MASTER_PUSH_DEST="$DOCKER_ORG/proxygen:latest$IMAGE_TAG_SUFFIX" ;
     if [ "$TRAVIS_BRANCH" = "master" ] ; then
       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
+        docker pull $MASTER_PUSH_DEST ;
+      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
         docker build -t $MASTER_PUSH_DEST --cache-from $MASTER_PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} . ;
       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
         docker push $MASTER_PUSH_DEST ;
     elif [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ] ; then
         TAG_PUSH_DEST="$DOCKER_ORG/proxygen:$TRAVIS_TAG$IMAGE_TAG_SUFFIX" ;
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
+          docker pull $MASTER_PUSH_DEST ;
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
           docker build -t $TAG_PUSH_DEST --cache-from $MASTER_PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
