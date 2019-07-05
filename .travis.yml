@@ -38,7 +38,7 @@ matrix:
     - IMAGE_TAG_SUFFIX=-oo201811-u1-disco
   - env:
     - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-cosmic
-    - IMAGE_TAG_SUFFIX=-oozf201811-disco
+    - IMAGE_TAG_SUFFIX=-oozf201811-cosmic
   - env:
     - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-u1-cosmic
     - IMAGE_TAG_SUFFIX=-oozf201811-u1-cosmic
