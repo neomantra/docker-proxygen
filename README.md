@@ -13,23 +13,17 @@ Image tags follow the following format:
  * `neomantra/proxygen:<tag-version>`
  * `neomantra/proxygen:<tag-version>-oo<zf><onload-version>`
 
-In addition to an `ubuntu:xenial` base, we also build against [OpenOnload Docker base images](https://github.com/neomantra/docker-onload).
+In addition to `ubuntu:cosmic` and `ubuntu:disco` bases, we also build against [OpenOnload Docker base images](https://github.com/neomantra/docker-onload).
 
-Full layout:
+You can find all the latest tags here:
 
- * `neomantra/proxygen:latest`
- * `neomantra/proxygen:latest-oo201811`
- * `neomantra/proxygen:latest-oo201805-u1`
- * `neomantra/proxygen:latest-oo201710-u1.1`
- * `neomantra/proxygen:latest-oo201606-u1.3`
- * `neomantra/proxygen:latest-oozf201811`
- * `neomantra/proxygen:latest-oozf201805-u1`
- * `neomantra/proxygen:latest-oozf201710-u1.1`
- * `neomantra/proxygen:latest-oozf201606-u1.3`
+ * https://cloud.docker.com/u/neomantra/repository/docker/neomantra/onload/tags
 
-Here's a recent tag list:
+Here's a recent `tag-version` list:
+
   * `latest`
   * `2019.04.15.00`
+  * `2019.06.17.00`
 
 
 ## Image Build Arguments
@@ -38,12 +32,11 @@ For custom builds, the following Docker `--build-arg` options are available:
 
 | Key  | Default | Description |
 :----- | :-----: |:----------- |
-|PROXYGEN_BUILD_FROM_BASE | bionic |Docker image to base build on. |
-|PROXYGEN_BUILD_FROM_TAG | ubuntu |Docker tag to base build on. |
+|PROXYGEN_BUILD_FROM_BASE | ubuntu |Docker image to base build on. |
+|PROXYGEN_BUILD_FROM_TAG | cosmic |Docker tag to base build on. |
 |PROXYGEN_BUILD_FROM | `${PROXYGEN_BUILD_FROM_BASE}:${PROXYGEN_BUILD_FROM_TAG}` |Full Docker `FROM` path. |
 |J_LEVEL | 1 |Concurrent build level (passed to `-j`) |
-|JEMALLOC_VERSION | 5.1.0 |[jemalloc](https://github.com/jemalloc/jemalloc) version. |
-|COMMON_VERSION | 2019.04.15.00 |Common version for all the Facebook libraries. |
+|COMMON_VERSION | 2019.06.17.00 |Common version for all the Facebook libraries. |
 |FOLLY_VERSION | `${COMMON_VERSION}` |[Folly](https://github.com/facebook/folly) version. |
 |FIZZ_VERSION | `${COMMON_VERSION}` |[Fizz](https://github.com/facebookincubator/fizz) version. |
 |WANGLE_VERSION | `${COMMON_VERSION}` |[Wangle](https://github.com/facebook/wangle) version. |

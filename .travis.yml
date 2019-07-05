@@ -26,13 +26,14 @@ services:
   - docker
 
 env:
-  - PROXYGEN_BUILD_FROM=ubuntu:cosmic
   - PROXYGEN_BUILD_FROM=neomantra/onload:201811-cosmic-nozf
-  - PROXYGEN_BUILD_FROM=neomantra/onload:201805-u1-cosmic-nozf
+  - PROXYGEN_BUILD_FROM=neomantra/onload:201811-u1-cosmic-nozf
+  - PROXYGEN_BUILD_FROM=neomantra/onload:201811-u1-disco-nozf
   - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-cosmic
-  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201805-u1-cosmic
-# - PROXYGEN_BUILD_FROM=neomantra/onload:201710-u1.1-cosmic-nozf
-# - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201710-u1.1-cosmic
+  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-u1-cosmic
+  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-u1-disco
+  - PROXYGEN_BUILD_FROM=ubuntu:cosmic
+  - PROXYGEN_BUILD_FROM=ubuntu:disco
 
 
 script:
