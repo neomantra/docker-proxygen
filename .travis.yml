@@ -59,11 +59,11 @@ script:
       docker build -t proxygen-master -t $PUSH_DEST --cache-from $PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} . ;
       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
       docker push $PUSH_DEST ;
-    fi
-  - if [[ "$TRAVIS_TAG" ]] ; then
-      PUSH_DEST="$DOCKER_ORG/proxygen:$TRAVIS_TAG$IMAGE_TAG_SUFFIX" ;
-      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
-      docker build -t proxygen-tag -t $PUSH_DEST --cache-from $PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
-      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
-      docker push $PUSH_DEST ;
+      if [[ "$TRAVIS_TAG" ]] ; then
+        TAG_PUSH_DEST="$DOCKER_ORG/proxygen:$TRAVIS_TAG$IMAGE_TAG_SUFFIX" ;
+        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
+        docker build -t proxygen-tag -t $TAG_PUSH_DEST --cache-from $PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
+        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
+        docker push $TAG_PUSH_DEST ;
+      fi ;
     fi
