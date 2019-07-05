@@ -25,20 +25,36 @@ sudo: required
 services:
   - docker
 
-env:
-  - PROXYGEN_BUILD_FROM=neomantra/onload:201811-cosmic-nozf
-  - PROXYGEN_BUILD_FROM=neomantra/onload:201811-u1-cosmic-nozf
-  - PROXYGEN_BUILD_FROM=neomantra/onload:201811-u1-disco-nozf
-  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-cosmic
-  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-u1-cosmic
-  - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-u1-disco
-  - PROXYGEN_BUILD_FROM=ubuntu:cosmic
-  - PROXYGEN_BUILD_FROM=ubuntu:disco
+matrix:
+  include:
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onload:201811-cosmic-nozf
+    - IMAGE_TAG_SUFFIX=-oo201811-cosmic
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onload:201811-u1-cosmic-nozf
+    - IMAGE_TAG_SUFFIX=-oo201811-u1-cosmic
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onload:201811-u1-disco-nozf
+    - IMAGE_TAG_SUFFIX=-oo201811-u1-disco
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-cosmic
+    - IMAGE_TAG_SUFFIX=-oozf201811-disco
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-u1-cosmic
+    - IMAGE_TAG_SUFFIX=-oozf201811-u1-cosmic
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onloadzf:201811-u1-disco
+    - IMAGE_TAG_SUFFIX=-oozf201811-u1-disco
+  - env:
+    - PROXYGEN_BUILD_FROM=ubuntu:cosmic
+    - IMAGE_TAG_SUFFIX=-cosmic
+  - env:
+    - PROXYGEN_BUILD_FROM=ubuntu:disco
+    - IMAGE_TAG_SUFFIX=-disco
 
-
+PUSH_DATE="$DOCKER_ORG/proxygen:"
 script:
   - if [[ "$TRAVIS_BRANCH" == "master" ]] ; then
-      IMAGE_TAG_SUFFIX=$(echo "$PROXYGEN_BUILD_FROM" | sed -e '/^neomantra\/onload\(.*\):\([0-9u-]*\)-cosmic\(.*\)/!d;s//-oo\1\2/' ) ;
       PUSH_DEST="$DOCKER_ORG/proxygen:latest$IMAGE_TAG_SUFFIX" ;
       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
       docker build -t proxygen-master -t $PUSH_DEST --cache-from $PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} . ;
@@ -46,7 +62,6 @@ script:
       docker push $PUSH_DEST ;
     fi
   - if [[ "$TRAVIS_TAG" ]] ; then
-      IMAGE_TAG_SUFFIX=$(echo "$PROXYGEN_BUILD_FROM" | sed -e '/^neomantra\/onload\(.*\):\([0-9u-]*\)-cosmic\(.*\)/!d;s//-oo\1\2/' ) ;
       PUSH_DEST="$DOCKER_ORG/proxygen:$TRAVIS_TAG$IMAGE_TAG_SUFFIX" ;
       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
       docker build -t proxygen-tag -t $PUSH_DEST --cache-from $PUSH_DEST --build-arg J_LEVEL=2 --build-arg PROXYGEN_BUILD_FROM=${PROXYGEN_BUILD_FROM} --build-arg COMMON_VERSION=$TRAVIS_TAG . ;
