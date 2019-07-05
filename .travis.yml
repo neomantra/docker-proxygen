@@ -52,7 +52,6 @@ matrix:
     - PROXYGEN_BUILD_FROM=ubuntu:disco
     - IMAGE_TAG_SUFFIX=-disco
 
-PUSH_DATE="$DOCKER_ORG/proxygen:"
 script:
   - if [[ "$TRAVIS_BRANCH" == "master" ]] ; then
       PUSH_DEST="$DOCKER_ORG/proxygen:latest$IMAGE_TAG_SUFFIX" ;
