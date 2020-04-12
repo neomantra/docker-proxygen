@@ -28,6 +28,18 @@ services:
 matrix:
   include:
   - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onload:7.0.0.176-cosmic-nozf
+    - IMAGE_TAG_SUFFIX=-oo7.0.0.176-cosmic
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onload:7.0.0.176-disco-nozf
+    - IMAGE_TAG_SUFFIX=-oo7.0.0.176-disco
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onloadzf:7.0.0.176-cosmic
+    - IMAGE_TAG_SUFFIX=-oozf7.0.0.176-cosmic
+  - env:
+    - PROXYGEN_BUILD_FROM=neomantra/onloadzf:7.0.0.176-disco
+    - IMAGE_TAG_SUFFIX=-oozf7.0.0.176-disco
+  - env:
     - PROXYGEN_BUILD_FROM=neomantra/onload:201811-cosmic-nozf
     - IMAGE_TAG_SUFFIX=-oo201811-cosmic
   - env:
